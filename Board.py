@@ -7,8 +7,12 @@ from pysat.solvers import Solver
 class Board:
     def __init__(self, file_path: str):
         self.board = self.handle_file(file_path)
-        self.rows = len(self.board)
-        self.columns = len(self.board[0])
+        if (self.board == []):
+            self.rows = 0
+            self.columns = 0
+        else:
+            self.rows = len(self.board)
+            self.columns = len(self.board[0])
         self.list_var = []
         self.dict_var = self.assign_variables()
         self.result = []
@@ -83,7 +87,7 @@ class Board:
         if (k < len(vars)):
             for comb in combinations(vars, k + 1):
                 cnf.append([-v for v in comb])
-
+        
         return cnf
         
     def get_cnf(self):
@@ -102,8 +106,10 @@ class Board:
                     
                     sub_cnf.clear()
                     neighbors.clear()
-        print(cnf)
-        return cnf
+        # Remove duplicate clauses
+        unique_cnf = [list(clause) for clause in set(tuple(sorted(clause)) for clause in cnf)]
+
+        return unique_cnf
     
     def transform_model(self, model: list[int]):
         self.result = deepcopy(self.board)

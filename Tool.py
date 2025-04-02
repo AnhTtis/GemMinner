@@ -9,11 +9,9 @@ class Tool:
         self.cnf = board.get_cnf()
         self.list_var = board.get_list_var()
         self.time = 0
-        self.found_solution = False
         self.result = []
-        self.model = 0
+        self.model = 1000000
         self.solve()
-
     
     def check_valid_clause(self, clause:list[int], solution: list[int]) -> bool:
         for c in clause:
@@ -28,7 +26,7 @@ class Tool:
                 return False
         if not (self.check_valid(solution)):
             return False
-        
+    
         return True
                 
     def check_valid(self, model: list[int]) -> bool:
@@ -43,9 +41,13 @@ class Tool:
     
 
     def write_output(self, file_path:str):
-        if not self.result:
+        # No solution after 1000000 models
+        if self.result == []:
             with open(file_path, "w") as file:
-                file.write("No solution")
+                if (self.board.board == []):
+                    file.write("Board is empty")
+                else:
+                    file.write("No solution after 1000000 models")
             return
         with open(file_path, "w") as file:
             for r in self.result:
@@ -54,29 +56,34 @@ class Tool:
 class Tool_Library(Tool):
     def solve(self):
         start_time = time.time()
-        solver = Solver(name = "g4")
+        solver = Solver()
         for clause in self.cnf:
             solver.add_clause(clause)
         
-        for m in solver.enum_models(): 
-            self.model += 1
+        for m in solver.enum_models():
+            self.model -= 1
             model = m
             if self.check_valid(model):
                 self.result = self.board.get_result()
                 end_time = time.time()
                 self.time = end_time - start_time
                 return
-            print(f"Model {self.model} is not valid")
+            if self.model == 0:
+                end_time = time.time()
+                self.time = end_time - start_time
+                return
+        
         end_time = time.time()
         self.time = end_time - start_time
-
-class Tool_bruce_force(Tool):
+        
+class Tool_Brute_Force(Tool):
     def solve(self):
         start_time = time.time()
         solution = deepcopy(self.list_var)
         
         for k in range(0, len(self.list_var)):
             for comb in combinations(self.list_var, k):
+                self.model -= 1
                 get_test = deepcopy(solution)
                 for c in comb:
                     get_test[c-1] = -solution[c-1]
@@ -85,22 +92,31 @@ class Tool_bruce_force(Tool):
                     self.result = self.board.get_result()
                     end_time = time.time()
                     self.time = end_time - start_time
-                    return 
-                
+                    return
+                if (self.model == 0):
+                    end_time = time.time()
+                    self.time = end_time - start_time
+                    return
+
         end_time = time.time()
         self.time = end_time - start_time
 
-class Tool_backtracking(Tool):
+class Tool_Backtracking(Tool):
     def solve(self):
         start_time = time.time()
         solution = [0] * len(self.list_var)
-        if self.backtrack(solution, 0):
+        if self.backtrack(solution, 0) == True:
             self.result = self.board.get_result()
+        
         end_time = time.time()
         self.time = end_time - start_time
 
     def backtrack(self, solution: list[int], index: int) -> bool:
+        if self.model == 0:
+            return False
+    
         if index == len(solution):
+            self.model -= 1
             return self.check_valid_solution(solution, self.cnf)
         
         for value in [self.list_var[index], -self.list_var[index]]:
