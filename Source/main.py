@@ -4,8 +4,8 @@ from Survey import Testcase
 
 test = Testcase()
 
-folder_test = "Testcase"
-folder_output = "Result"
+folder_test = "Source/Testcase"
+folder_output = "Source/Result"
 
 order_list = []
 time_list = []
