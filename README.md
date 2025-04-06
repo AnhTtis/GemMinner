@@ -59,16 +59,14 @@ To run the source code, follow these steps:
 **Method 1: Cloning the Repository**
 - **Clone the Repository**: Clone the GitHub repository to your local machine using the following command:
 'git clone https://github.com/AnhTtis/GemMinner.git'
-- **Navigate to the Project Directory**: Change to the project directory:
+- **Navigate to the Project Directory**: Change to the project directory and open VS Code:
 'cd GemMiner'
-- **Run the Main Script**: Execute the main script to run the experiments:
-'python Source/main.py'
+- **Run the Main Script**: Go to the main.py and press the Run botton.
 - **View Results**: The results will be saved in the `Result` folder, and the performance comparison will be printed in the console.
 
 **Method 2: Using the Provided ZIP File**
 - **Unzip the File**: Unzip the provided `23127130.zip` file to your local machine.
-- **Navigate to the Project Directory**: Change to the project directory:
+- **Navigate to the Project Directory**: Change to the project directory and open VS Code:
 'cd 23127130'
-- **Run the Main Script**: Execute the main script to run the experiments:
-'python Source/main.py'
+- **Run the Main Script**: Go to the main.py and press the Run botton.
 - **View Results**: The results will be saved in the `Result` folder, and the performance comparison will be printed in the console.
