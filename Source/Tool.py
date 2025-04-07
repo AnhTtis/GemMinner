@@ -9,6 +9,7 @@ class Tool:
         self.cnf = board.get_cnf()
         self.list_var = board.get_list_var()
         self.time = 0
+        self.name = ""
         self.result = []
         self.model = 1000000
         self.solve()
@@ -40,23 +41,34 @@ class Tool:
         return self.time
     
 
-    def write_output(self, file_path:str):
-        # No solution after 1000000 models
-        if self.result == []:
-            with open(file_path, "w") as file:
-                if (self.board.board == []):
-                    file.write("Board is empty")
+    def write_output(self, file_path: str):
+        """
+        Writes the output to the specified file. If self.name is "library", it writes from the start.
+        Otherwise, it appends to the file. The self.name is written with decoration "***" at the top.
+        """
+        # Determine the mode based on self.name
+        mode = "w" if self.name == "library" else "a"
+
+        with open(file_path, mode) as file:
+            # Write the name with decoration at the beginning
+            file.write(f"*** {self.name} ***\n")
+
+            # No solution after 1000000 models
+            if self.result == []:
+                if self.board.board == []:
+                    file.write("Board is empty\n")
                 else:
-                    file.write("No solution after 1000000 models")
-            return
-        with open(file_path, "w") as file:
+                    file.write("No solution after 1000000 models\n")
+                return
+
+            # Write the results
             for r in self.result:
                 file.write(", ".join(r) + "\n")
-    
 class Tool_Library(Tool):
     def solve(self):
         start_time = time.time()
         solver = Solver()
+        self.name = "library"
         for clause in self.cnf:
             solver.add_clause(clause)
         
@@ -79,6 +91,7 @@ class Tool_Library(Tool):
 class Tool_Brute_Force(Tool):
     def solve(self):
         start_time = time.time()
+        self.name = "brute_force"
         solution = deepcopy(self.list_var)
         
         for k in range(0, len(self.list_var)):
@@ -104,6 +117,7 @@ class Tool_Brute_Force(Tool):
 class Tool_Backtracking(Tool):
     def solve(self):
         start_time = time.time()
+        self.name = "backtracking"
         solution = [0] * len(self.list_var)
         if self.backtrack(solution, 0) == True:
             self.result = self.board.get_result()

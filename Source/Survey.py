@@ -16,11 +16,16 @@ class Testcase:
             print(f"Folder '{folder_name}' does not exist.")
             self.testcase_files = []  # Added to ensure attribute is always set
 
-    def generate_output_files(self, method: str):
+    def generate_output_files(self):
+        """
+        Generates output file names based on the input file names.
+        """
         for file in self.testcase_files:
-            if file.endswith(".txt"):
-                base_name = file[:-len(".txt")]
-                self.output_files.append(f"{base_name}_output_{method}.txt")
+            match = re.match(r'input_(\d+)\.txt', file)
+            if match:
+                num = match.group(1)
+                self.output_files.append(f"output_{num}.txt")
+                
                 
     def clear_files(self):
         if (self.testcase_files):

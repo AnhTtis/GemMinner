@@ -13,7 +13,7 @@ sub_time_list = []
 
 # Test the library
 test.read_files(folder_test)
-test.generate_output_files("library")
+test.generate_output_files()
 for i in range(len(test.testcase_files)):
     order_list.append(test.testcase_files[i])    
     file_path = f"{folder_test}/{test.testcase_files[i]}"
@@ -26,9 +26,10 @@ test.clear_files()
 time_list.append(sub_time_list)
 sub_time_list = []
     
-# Test the bruce force
+# Test the brute force
 test.read_files(folder_test)
-test.generate_output_files("brute_force")
+test.generate_output_files()
+
 for i in range(len(test.testcase_files)):    
     file_path = f"{folder_test}/{test.testcase_files[i]}"
     board = Board(file_path)
@@ -42,7 +43,7 @@ sub_time_list = []
 
 # Test the backtracking
 test.read_files(folder_test)
-test.generate_output_files("backtracking")
+test.generate_output_files()
 for i in range(len(test.testcase_files)):
     file_path = f"{folder_test}/{test.testcase_files[i]}"
     board = Board(file_path)
@@ -55,7 +56,7 @@ time_list.append(sub_time_list)
 sub_time_list = []
 
 # Print the result with formatted columns and units
-print(f"{'Order':<15} {'Library (s)':<15} {'Bruce Force (s)':<15} {'Backtracking (s)':<15}")
+print(f"{'Order':<15} {'Library (s)':<15} {'Brute Force (s)':<15} {'Backtracking (s)':<15}")
 print("-" * 60)  # Separator line
 for i in range(len(order_list)):
     print(f"{order_list[i]:<15} "

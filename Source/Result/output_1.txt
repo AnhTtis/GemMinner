@@ -1,0 +1,18 @@
+*** library ***
+T, T, T, 3, T
+T, 5, G, T, 3
+3, T, G, T, G
+G, T, T, T, 3
+G, T, 5, T, G
+*** brute_force ***
+T, T, G, 3, T
+G, 5, T, T, 3
+3, T, T, G, T
+T, T, T, T, 3
+T, T, 5, T, G
+*** backtracking ***
+T, T, T, 3, T
+T, 5, G, T, 3
+3, T, G, T, G
+G, T, T, T, 3
+T, T, 5, T, G
